@@ -1,4 +1,4 @@
-module github.com/kaptinlin/jsonschema
+module github.com/solo-finance/jsonschema
 
 go 1.21.1
 
