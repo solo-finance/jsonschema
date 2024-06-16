@@ -33,7 +33,12 @@ func NewCompiler() *Compiler {
 		DefaultBaseURI: "",
 		AssertFormat:   false,
 	}
-	compiler.initDefaults()
+	return compiler
+}
+
+func NewDefaultCompiler() *Compiler {
+	compiler := NewCompiler()
+	compiler.InitDefaults()
 	return compiler
 }
 
@@ -152,15 +157,15 @@ func (c *Compiler) RegisterLoader(scheme string, loaderFunc func(url string) (io
 	return c
 }
 
-// initDefaults initializes default values for decoders, media types, and loaders.
-func (c *Compiler) initDefaults() {
+// InitDefaults initializes default values for decoders, media types, and loaders.
+func (c *Compiler) InitDefaults() {
 	c.Decoders["base64"] = base64.StdEncoding.DecodeString
-	c.setupMediaTypes()
-	c.setupLoaders()
+	c.SetupDefaultMediaTypes()
+	c.SetupDefaultLoaders()
 }
 
-// setupMediaTypes configures default media type handlers.
-func (c *Compiler) setupMediaTypes() {
+// SetupDefaultMediaTypes configures default media type handlers.
+func (c *Compiler) SetupDefaultMediaTypes() {
 	c.MediaTypes["application/json"] = func(data []byte) (interface{}, error) {
 		var temp interface{}
 		if err := json.Unmarshal(data, &temp); err != nil {
@@ -186,8 +191,8 @@ func (c *Compiler) setupMediaTypes() {
 	}
 }
 
-// setupLoaders configures default loaders for fetching schemas via HTTP/HTTPS.
-func (c *Compiler) setupLoaders() {
+// SetupDefaultLoaders configures default loaders for fetching schemas via HTTP/HTTPS.
+func (c *Compiler) SetupDefaultLoaders() {
 	client := &http.Client{
 		Timeout: 10 * time.Second, // Set a reasonable timeout for network requests.
 	}
